@@ -1,6 +1,12 @@
 <template>
   <div>
-    <h1>Login</h1>
+    <v-row>
+      <v-col sm="4" cols="12" />
+      <v-col sm="4" cols="12">
+        <h1 style="text-align: center;">Login</h1>
+      </v-col>
+      <v-col sm="4" cols="12" />
+    </v-row>
   </div>
 </template>
 
