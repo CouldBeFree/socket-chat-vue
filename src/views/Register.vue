@@ -111,6 +111,15 @@ export default {
       data.userType = isPsychologist ? 'psychologist' : 'user'
       delete data.isPsychologist
       this.registerUser(data)
+        .finally(() => {
+          if (this.success) {
+            this.userData.name = ''
+            this.userData.password = ''
+            this.userData.email = ''
+            this.userData.isPsychologist = false
+            this.$refs.form.resetValidation()
+          }
+        })
     }
   },
   destroyed() {

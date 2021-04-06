@@ -84,11 +84,17 @@ export default {
         .finally(() => {
           if (this.success) this.$router.push('/')
         })
+    },
+    clearData() {
+      this.setSuccess(false)
+      this.setError(false)
     }
   },
+  mounted() {
+    this.clearData()
+  },
   destroyed() {
-    this.setSuccess(false)
-    this.setError(false)
+    this.clearData()
   }
 }
 </script>

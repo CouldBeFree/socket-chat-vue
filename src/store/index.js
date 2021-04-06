@@ -34,7 +34,7 @@ export default new Vuex.Store({
       commit('setLoading', true)
       commit('setError', null)
       commit('setSuccess', false)
-      axios.post('/auth/register', payload)
+      return axios.post('/auth/register', payload)
         .then(res => {
           const { data } = res
           commit('setSuccess', data.success)
