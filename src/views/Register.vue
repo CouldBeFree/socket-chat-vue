@@ -1,61 +1,63 @@
 <template>
-  <div class="register">
-    <v-row>
-      <v-col sm="4" cols="12" />
-      <v-col sm="4" cols="12">
-        <v-form v-model="valid" ref="form">
-          <v-text-field
-            v-model="userData.name"
-            :rules="validationRules.nameRules"
-            label="Name"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="userData.email"
-            :rules="validationRules.emailRules"
-            label="E-mail"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="userData.password"
-            :rules="validationRules.passwordRules"
-            label="Password"
-            type="password"
-            required
-          ></v-text-field>
-          <v-checkbox
-            v-model="userData.isPsychologist"
-            label="I am psychologist"
-          ></v-checkbox>
-          <v-btn
-            :disabled="!valid"
-            color="success"
-            class="mr-4"
-            :loading="loading"
-            @click="submit"
+  <v-container>
+    <div class="register">
+      <v-row>
+        <v-col sm="4" cols="12" />
+        <v-col sm="4" cols="12">
+          <v-form v-model="valid" ref="form">
+            <v-text-field
+              v-model="userData.name"
+              :rules="validationRules.nameRules"
+              label="Name"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="userData.email"
+              :rules="validationRules.emailRules"
+              label="E-mail"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="userData.password"
+              :rules="validationRules.passwordRules"
+              label="Password"
+              type="password"
+              required
+            ></v-text-field>
+            <v-checkbox
+              v-model="userData.isPsychologist"
+              label="I am psychologist"
+            ></v-checkbox>
+            <v-btn
+              :disabled="!valid"
+              color="success"
+              class="mr-4"
+              :loading="loading"
+              @click="submit"
+            >
+              Register
+            </v-btn>
+            <p class="mt-4">If you already have account <router-link to="/login">Login</router-link></p>
+          </v-form>
+          <v-alert
+            v-if="success"
+            dark
+            :text="true"
+            type="success"
+          >You have been successfully registered. Not you can <router-link to="login">Login</router-link> to your account
+          </v-alert>
+          <v-alert
+            v-if="error"
+            dark
+            type="warning"
           >
-            Register
-          </v-btn>
-          <p class="mt-4">If you already have account <router-link to="/login">Login</router-link></p>
-        </v-form>
-        <v-alert
-          v-if="success"
-          dark
-          :text="true"
-          type="success"
-        >You have been successfully registered. Not you can <router-link to="login">Login</router-link> to your account
-        </v-alert>
-        <v-alert
-          v-if="error"
-          dark
-          type="warning"
-        >
-          {{message}}
-        </v-alert>
-      </v-col>
-      <v-col sm="4" cols="12" />
-    </v-row>
-  </div>
+            {{message}}
+          </v-alert>
+        </v-col>
+        <v-col sm="4" cols="12" />
+      </v-row>
+    </div>
+  </v-container>
 </template>
 
 <script>

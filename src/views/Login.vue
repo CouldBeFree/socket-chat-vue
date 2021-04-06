@@ -1,44 +1,46 @@
 <template>
-  <div class="login">
-    <v-row>
-      <v-col sm="4" cols="12" />
-      <v-col sm="4" cols="12">
-        <v-form v-model="valid" ref="form">
-          <v-text-field
-            v-model="userData.email"
-            :rules="emailRules"
-            label="E-mail"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="userData.password"
-            :rules="passwordRules"
-            label="Password"
-            type="password"
-            required
-          ></v-text-field>
-          <v-btn
-            :disabled="!valid"
-            :loading="loading"
-            color="success"
-            class="mr-4"
-            @click="submit"
+  <v-container>
+    <div class="login">
+      <v-row>
+        <v-col sm="4" cols="12" />
+        <v-col sm="4" cols="12">
+          <v-form v-model="valid" ref="form">
+            <v-text-field
+              v-model="userData.email"
+              :rules="emailRules"
+              label="E-mail"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="userData.password"
+              :rules="passwordRules"
+              label="Password"
+              type="password"
+              required
+            ></v-text-field>
+            <v-btn
+              :disabled="!valid"
+              :loading="loading"
+              color="success"
+              class="mr-4"
+              @click="submit"
+            >
+              Login
+            </v-btn>
+            <p class="mt-4">If you don't have account <router-link to="/register">Register</router-link></p>
+          </v-form>
+          <v-alert
+            v-if="error"
+            dark
+            type="warning"
           >
-            Login
-          </v-btn>
-          <p class="mt-4">If you don't have account <router-link to="/register">Register</router-link></p>
-        </v-form>
-        <v-alert
-          v-if="error"
-          dark
-          type="warning"
-        >
-          {{message}}
-        </v-alert>
-      </v-col>
-      <v-col sm="4" cols="12" />
-    </v-row>
-  </div>
+            {{message}}
+          </v-alert>
+        </v-col>
+        <v-col sm="4" cols="12" />
+      </v-row>
+    </div>
+  </v-container>
 </template>
 
 <script>

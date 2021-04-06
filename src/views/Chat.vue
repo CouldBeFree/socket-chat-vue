@@ -1,6 +1,33 @@
 <template>
   <v-app>
-    <h1>{{msg}}</h1>
+    <v-navigation-drawer
+      floating
+      permanent
+    >
+      <v-list
+        dense
+        rounded
+      >
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="item.title"
+          link
+          class="mb-3"
+          :class="{ 'mt-4': index === 0 }"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+            <v-list-item-avatar>
+              <img :src="`https://randomuser.me/api/portraits/women/${index + 1}.jpg`">
+            </v-list-item-avatar>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
   </v-app>
 </template>
 
@@ -9,29 +36,23 @@ export default {
   name: "Chat",
   data() {
     return {
-      msg: ''
+      msg: '',
+      items: [
+        { title: 'Home' },
+        { title: 'About' },
+      ]
     }
   },
   mounted() {
     console.log(this.$socket)
     this.$socket.emit("user", this.user);
-    this.sockets.subscribe('test', (data) => {
-      this.msg = data.message;
-    });
-    /*this.sockets.listener.subscribe("user-connected", (data) => {
-      console.log(data);
-      this.$socket.emit("users");
-    });
-    this.$socket.emit("users");
-    this.sockets.listener.subscribe("users", (data) => {
-      console.log("users", data);
-    });*/
   },
   sockets: {
     connect: function () {
       console.log('socket connected')
     },
-    customEmit: function () {
+    customEmit: function (data) {
+      this.msg = data.message;
       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
     }
   },
