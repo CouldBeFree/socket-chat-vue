@@ -10,9 +10,13 @@ export default new Vuex.Store({
     success: false,
     error: false,
     message: '',
-    user: null
+    user: null,
+    users: null
   },
   mutations: {
+    setUsers(state, users) {
+      return state.users = users
+    },
     setLoading(state, loading) {
       return state.loading = loading
     },
@@ -68,6 +72,17 @@ export default new Vuex.Store({
         })
         .catch(e => commit('setError', e.response))
         .finally(() => commit('setLoading', false))
+    },
+    getUsers({ commit, state }) {
+      return axios.get('/users', {
+        params: {
+          user: queryParams[state.user.userType]
+        }
+      })
+        .then(res => {
+          commit('setUsers', res.data.data)
+        })
+        .catch(e => console.error(e))
     }
   },
   getters: {
@@ -85,6 +100,14 @@ export default new Vuex.Store({
     },
     error(state) {
       return state.error
+    },
+    users(state) {
+      return state.users
     }
   }
 })
+
+const queryParams = {
+  'user': 'psychologist',
+  'psychologist': 'user'
+}
