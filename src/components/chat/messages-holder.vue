@@ -3,7 +3,7 @@
     <div>
       <ul>
         <li
-          v-for="(item, index) in messages"
+          v-for="(item, index) in value"
           :key="index"
         >{{item.message}}
         </li>
@@ -11,7 +11,6 @@
     </div>
     <div>
       <p v-if="typing">{{typing}}</p>
-      <p>to {{selectedUser}}</p>
       <v-text-field
         label="Enter yor message here"
         hide-details="auto"
@@ -26,19 +25,31 @@
 <script>
 export default {
   name: "messages-holder",
-  props: ['selectedUser'],
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
+    user: {
+      type: Object,
+      default: () => {}
+    },
+    selectedUser: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
-      messages: [],
+      messagesLocal: [],
       message: '',
       typing: null
     }
   },
   methods: {
     onEnter() {
-      this.messages.push({ message: this.message })
-      this.$socket.emit('message', {
-        to: this.selectedUser,
+      this.$emit('input', {
+        from: this.user.name,
         message: this.message
       })
       this.message = ''
@@ -55,7 +66,7 @@ export default {
     messageResponse: function (msg) {
       this.typing = null
       console.log(`from ${msg.from} selected ${this.selectedUser}`)
-      if(msg.from === this.selectedUser) this.messages.push(msg)
+      if(msg.from === this.selectedUser) this.messagesLocal.push(msg)
     },
     userTyping(name) {
       if (name === this.selectedUser) {
@@ -64,14 +75,6 @@ export default {
           this.typing = null
         }, 3000)
       }
-    },
-    askForUserId() {
-      this.$socket.emit('typing', this.user._id)
-    }
-  },
-  computed: {
-    user() {
-      return this.$store.getters.user
     }
   }
 }

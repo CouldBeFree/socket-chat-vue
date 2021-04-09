@@ -1,9 +1,17 @@
 <template>
   <v-app>
     <div class="wrap">
-      <drawer class="drawer" @selected="onUserSelect" />
+      <drawer
+        :users="users"
+        :loading="loading"
+        class="drawer"
+        @selected="onUserSelect"
+      />
       <messages-holder
+        :user="user"
         :selectedUser="selectedUser"
+        :loading="loading"
+        v-model="messages"
         class="message"
       />
     </div>
@@ -13,6 +21,7 @@
 <script>
 import drawer from "./drawer";
 import messagesHolder from "./messages-holder"
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   name: "Chat",
@@ -26,16 +35,42 @@ export default {
     messagesHolder
   },
   methods: {
+    ...mapActions(['getMessages']),
+    ...mapMutations(['setMessage']),
     onUserSelect(user) {
-      this.selectedUser = user.name
+      this.selectedUser = user
+      this.getMessages(user.name)
+        .finally(() => {
+          console.log(this.messages)
+        })
+    },
+    getUsers() {
+      this.$store.dispatch('getUsers')
+        .finally(() => this.selectedUser = this.users[0])
     }
   },
   mounted() {
     this.$socket.emit("user", this.user);
+    this.getUsers();
   },
   computed: {
     user() {
       return this.$store.getters.user
+    },
+    users() {
+      return this.$store.getters.users
+    },
+    messages: {
+      get() {
+        return this.$store.getters.messages
+      },
+      set(val) {
+        if (this.selectedUser) val.to = this.selectedUser.name
+        this.setMessage(val)
+      }
+    },
+    loading() {
+      return this.$store.getters.loading
     }
   }
 }

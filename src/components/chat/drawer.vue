@@ -41,9 +41,15 @@
 <script>
 export default {
   name: "drawer",
+  props: {
+    users: {
+      type: Array,
+      default: () => []
+    },
+    loading: Boolean
+  },
   data() {
     return {
-      msg: '',
       selectedItem: 0
     }
   },
@@ -53,24 +59,7 @@ export default {
       this.$emit('selected', user)
     }
   },
-  mounted() {
-    this.$store.dispatch('getUsers')
-      .finally(() => {
-        this.$emit('selected', this.users[0])
-      })
-  },
-  sockets: {
-    connect: function () {
-      console.log('socket connected')
-    },
-    customEmit: function (data) {
-      this.msg = data.message;
-    }
-  },
   computed: {
-    users() {
-      return this.$store.getters.users
-    },
     user() {
       return this.$store.getters.user
     }

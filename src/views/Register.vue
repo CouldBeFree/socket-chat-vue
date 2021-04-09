@@ -120,6 +120,7 @@ export default {
             this.userData.email = ''
             this.userData.isPsychologist = false
             this.$refs.form.resetValidation()
+            this.$router.push('/')
           }
         })
     }

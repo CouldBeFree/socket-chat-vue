@@ -11,7 +11,8 @@ export default new Vuex.Store({
     error: false,
     message: '',
     user: null,
-    users: null
+    users: null,
+    messages: []
   },
   mutations: {
     setUsers(state, users) {
@@ -20,7 +21,7 @@ export default new Vuex.Store({
     setLoading(state, loading) {
       return state.loading = loading
     },
-    setMessage(state, message) {
+    setMessageFromApi(state, message) {
       return state.message = message
     },
     setSuccess(state, success) {
@@ -31,6 +32,12 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       return state.user = user
+    },
+    setMessages(state, messages) {
+      return state.messages = messages
+    },
+    setMessage(state, message) {
+      return state.messages.push(message)
     }
   },
   actions: {
@@ -45,7 +52,7 @@ export default new Vuex.Store({
         })
         .catch(e => {
           commit('setError', true)
-          if (e.response) return commit('setMessage', e.response.data.message)
+          if (e.response) return commit('setMessageFromApi', e.response.data.message)
         })
         .finally(() => commit('setLoading', false))
     },
@@ -60,7 +67,7 @@ export default new Vuex.Store({
         })
         .catch(e => {
           commit('setError', true)
-          if (e.response) return commit('setMessage', e.response.data.message)
+          if (e.response) return commit('setMessageFromApi', e.response.data.message)
         })
         .finally(() => commit('setLoading', false))
     },
@@ -83,6 +90,19 @@ export default new Vuex.Store({
           commit('setUsers', res.data.data)
         })
         .catch(e => console.error(e))
+    },
+    getMessages({ commit }, query) {
+      commit('setLoading', true)
+      return axios.get('/users/messages', {
+        params: {
+          user: query
+        }
+      })
+        .then(res => {
+          commit('setMessages', res.data.data)
+        })
+        .catch(e => console.error(e))
+        .finally(() => commit('setLoading', false))
     }
   },
   getters: {
@@ -103,6 +123,9 @@ export default new Vuex.Store({
     },
     users(state) {
       return state.users
+    },
+    messages(state) {
+      return state.messages
     }
   }
 })
