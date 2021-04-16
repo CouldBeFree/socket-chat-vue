@@ -8,8 +8,9 @@
         dense
         rounded
       >
-        {{user.name}}
-        {{user.userType}}
+        <p>Users online {{onlineUsers.length}}</p>
+        <p>User name {{user.name}}</p>
+        <p>User type{{user.userType}} </p>
         <v-list-item-group
           mandatory
           color="yellow"
@@ -29,7 +30,11 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
+            <v-list-item-title :class="{
+              'unread-message': (item.name === messageFrom && item.name !== users[selectedItem].name),
+              'online': isOnline(item)}">
+              {{ item.name }}
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         </v-list-item-group>
@@ -42,6 +47,13 @@
 export default {
   name: "drawer",
   props: {
+    onlineUsers: {
+      type: Array,
+      default: () => []
+    },
+    messageFrom: {
+      type: String
+    },
     users: {
       type: Array,
       default: () => []
@@ -57,16 +69,35 @@ export default {
     selectedItem(val) {
       const user = this.users[val]
       this.$emit('selected', user)
+      if (user.name === this.messageFrom) {
+        this.$emit('update:messageFrom', null)
+      }
+    },
+    messageFrom(val) {
+      if (val === this.users[this.selectedItem].name) {
+        this.$emit('update:messageFrom', null)
+      }
     }
   },
   computed: {
     user() {
       return this.$store.getters.user
     }
+  },
+  methods: {
+    isOnline(user) {
+      return this.onlineUsers.filter(onlineUsr => onlineUsr.name === user.name).length
+    }
   }
 }
 </script>
 
 <style scoped>
+.online {
+  color: green;
+}
 
+.unread-message {
+  color: red;
+}
 </style>

@@ -1,10 +1,29 @@
 <template>
   <v-app>
+    <div class="text-center ma-2">
+      <v-snackbar
+        v-model="snackbar"
+      >
+        <p>{{ onlineUser }} is online now</p>
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
     <div class="wrap">
       <drawer
         :users="users"
         :loading="loading"
+        :messageFrom.sync="from"
         class="drawer"
+        :onlineUsers="onlineUsers"
         @selected="onUserSelect"
       />
       <messages-holder
@@ -28,7 +47,12 @@ export default {
   name: "Chat",
   data() {
     return {
-      selectedUser: null
+      selectedUser: null,
+      from: null,
+      onlineUsers: [],
+      timeout: 3000,
+      onlineUser: null,
+      snackbar: false
     }
   },
   components: {
@@ -56,7 +80,20 @@ export default {
   },
   sockets: {
     messageResponse(msg) {
+      this.from = msg.from
       this.setMessage(msg);
+    },
+    onlineUsers(users) {
+      console.info('users online', users)
+      this.onlineUsers = users
+    },
+    userOnline(usr) {
+      if (this.user.name !== usr.name) {
+        this.onlineUser = usr.name
+        this.snackbar = true
+      }
+      console.info('user', usr)
+      this.onlineUsers.push(usr)
     }
   },
   computed: {

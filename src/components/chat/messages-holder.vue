@@ -5,10 +5,12 @@
         <li
           v-for="(item, index) in value"
           :key="index">
-          <p>
-            <span>Name: {{item.from}}</span> <span>Time: {{ getTime(item.time) }}</span>
-          </p>
-          <p class="message">Message: {{item.message}}</p>
+          <div v-if="selectedUser.name === item.from || selectedUser.name === item.to">
+            <p>
+              <span>Name: {{item.from}}</span> <span>Time: {{ getTime(item.time) }}</span>
+            </p>
+            <p class="message">Message: {{item.message}}</p>
+          </div>
         </li>
       </ul>
     </div>
