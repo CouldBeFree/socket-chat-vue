@@ -22,6 +22,7 @@
 import drawer from "./drawer";
 import messagesHolder from "./messages-holder"
 import { mapActions, mapMutations } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: "Chat",
@@ -53,6 +54,11 @@ export default {
     this.$socket.emit("user", this.user);
     this.getUsers();
   },
+  sockets: {
+    messageResponse(msg) {
+      this.setMessage(msg);
+    }
+  },
   computed: {
     user() {
       return this.$store.getters.user
@@ -66,6 +72,8 @@ export default {
       },
       set(val) {
         if (this.selectedUser) val.to = this.selectedUser.name
+        val.time = moment().toDate()
+        this.$socket.emit('message', val)
         this.setMessage(val)
       }
     },

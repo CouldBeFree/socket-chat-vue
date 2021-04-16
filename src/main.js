@@ -15,7 +15,6 @@ Vue.use(
   })
 );
 
-
 Vue.config.productionTip = false
 
 new Vue({

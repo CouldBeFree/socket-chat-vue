@@ -1,11 +1,14 @@
 <template>
   <v-container class="message-holder">
     <div>
-      <ul>
+      <ul class="message-list">
         <li
           v-for="(item, index) in value"
-          :key="index"
-        >{{item.message}}
+          :key="index">
+          <p>
+            <span>Name: {{item.from}}</span> <span>Time: {{ getTime(item.time) }}</span>
+          </p>
+          <p class="message">Message: {{item.message}}</p>
         </li>
       </ul>
     </div>
@@ -23,6 +26,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: "messages-holder",
   props: {
@@ -47,6 +52,9 @@ export default {
     }
   },
   methods: {
+    getTime(time) {
+      return moment(time).format("hh:mm:ss a")
+    },
     onEnter() {
       this.$emit('input', {
         from: this.user.name,
@@ -85,5 +93,13 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.message-list {
+  list-style: none;
+}
+
+.message-list .message {
+  padding-left: 10px;
 }
 </style>
